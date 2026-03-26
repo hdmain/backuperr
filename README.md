@@ -18,6 +18,15 @@ Supports full + incremental backups, restore with prune (deleted files are remov
 - Optional webhook notifications from host and client
 - Discord webhook auto-detection with rich embed output
 
+## Install
+client:
+```bash
+curl -sSL https://raw.githubusercontent.com/hdmain/backuperr/main/install_client.sh | bash
+```
+host:
+```bash
+curl -sSL https://raw.githubusercontent.com/hdmain/backuperr/main/install_host.sh | bash
+```
 ## Project layout
 
 - `cmd/host`: host entrypoint
@@ -28,7 +37,7 @@ Supports full + incremental backups, restore with prune (deleted files are remov
 
 ## Requirements
 
-- Go `1.22+`
+- Go `1.22+`(if build)
 - Linux recommended for production use (cron + disk reporting)
 
 ## Build
