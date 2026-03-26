@@ -3,39 +3,31 @@ name: Go Release (Linux)
 on:
   push:
     tags:
-      - 'v*'   # np. v1.0.0
+      - 'v*'
 
 jobs:
   build:
-    name: Build & Release (Linux)
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v4
+      - uses: actions/setup-go@v4
         with:
           go-version: '1.22'
 
-      - name: Build binaries
+      - name: Build
         run: |
           mkdir -p dist
+          GOOS=linux GOARCH=amd64 go build -o dist/client ./cmd/client
+          GOOS=linux GOARCH=amd64 go build -o dist/host ./cmd/host
 
-          GOOS=linux GOARCH=amd64 go build -o dist/client-linux-amd64 ./cmd/client
-          GOOS=linux GOARCH=amd64 go build -o dist/host-linux-amd64 ./cmd/host
+      - name: Check files (DEBUG)
+        run: ls -lah dist
 
-      - name: Create archive
-        run: |
-          tar -czvf dist/binaries-linux-amd64.tar.gz -C dist client-linux-amd64 host-linux-amd64
-
-      - name: Create Release
+      - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            dist/client-linux-amd64
-            dist/host-linux-amd64
-            dist/binaries-linux-amd64.tar.gz
+          files: dist/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
