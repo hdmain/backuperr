@@ -1,0 +1,32 @@
+# Copy to client.yaml (paths below are typical on Linux).
+
+url: http://127.0.0.1:8443
+api_key: change-this-main-key
+
+# Optional: POST after backup (ok/error) and restore (ok/error). Plain URLs get JSON; Discord incoming
+# webhook URLs (discord.com/api/webhooks/...) get a formatted embed with status, time, and disk fields.
+# webhook_url: "https://discord.com/api/webhooks/000000000000000000/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Directory to back up (recursive).
+backup_root: /home/you/data
+
+# Where restores are written. If omitted, defaults to backup_root (in-place restore).
+# If you run the client from inside backup_root (e.g. /root/client with restore_to /root),
+# the running binary cannot be overwritten (ETXTBSY); use a separate restore_to such as:
+# restore_to: /home/you/restored
+
+# Tracks last backup id for incremental runs (default: <backup_root>/.backuperr-state.json).
+# state_path: /home/you/.backuperr-state.json
+
+# Optional: where to create temporary upload/pack files (instead of /tmp).
+# Helps when /tmp is small. Example on Linux:
+# temp_dir: /var/tmp
+# temp_dir: /root/.backuperr-tmp
+
+# On Linux, run ./client (no args) and choose "Schedule backups (cron)" to install a user crontab
+# that runs: client -config <this-file> backup [--full].
+
+# Optional: skip paths whose slash-separated name contains any of these substrings.
+exclude:
+  - ".git"
+  - "node_modules"

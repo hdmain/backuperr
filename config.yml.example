@@ -1,0 +1,9 @@
+# Host config: copy to config.yml next to the host binary (or pass -config path).
+
+listen: ":8443"
+data_dir: "./data"
+main_key: "change-this-main-key"
+
+# Optional: POST on startup and after each backup received/failed. Plain URLs get JSON; Discord webhook
+# URLs get a formatted embed (status, time, data_dir free/total, event, client_ip when applicable).
+# webhook_url: "https://discord.com/api/webhooks/000000000000000000/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
