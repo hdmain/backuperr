@@ -1,28 +1,41 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Go
+name: Go Release (Linux)
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - 'v*'   # np. v1.0.0
 
 jobs:
-
   build:
+    name: Build & Release (Linux)
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.22'
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
 
-    - name: client
-      run: go build -o client ./cmd/client
+      - name: Build binaries
+        run: |
+          mkdir -p dist
 
-    - name: host
-      run: go build -o host ./cmd/host
+          GOOS=linux GOARCH=amd64 go build -o dist/client-linux-amd64 ./cmd/client
+          GOOS=linux GOARCH=amd64 go build -o dist/host-linux-amd64 ./cmd/host
+
+      - name: Create archive
+        run: |
+          tar -czvf dist/binaries-linux-amd64.tar.gz -C dist client-linux-amd64 host-linux-amd64
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/client-linux-amd64
+            dist/host-linux-amd64
+            dist/binaries-linux-amd64.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
